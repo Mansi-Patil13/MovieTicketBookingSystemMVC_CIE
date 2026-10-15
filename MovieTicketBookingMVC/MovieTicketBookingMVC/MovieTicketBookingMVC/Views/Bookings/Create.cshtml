@@ -1,0 +1,39 @@
+@model MovieTicketBookingMVC.Models.BookingViewModel
+@{
+    ViewBag.Title = "Book tickets";
+}
+<div class="form-shell">
+    <div class="form-heading"><p class="eyebrow">RESERVE YOUR SEATS</p><h1>Book your tickets</h1><p>You're booking for <strong>@Model.MovieTitle</strong>.</p></div>
+    @using (Html.BeginForm("Create", "Bookings", FormMethod.Post, new { @class = "booking-form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.MovieId)
+        @Html.HiddenFor(m => m.MovieTitle)
+        @Html.HiddenFor(m => m.TicketPrice)
+        @Html.ValidationSummary(false, "", new { @class = "validation-summary" })
+        <div class="form-grid">
+            <div class="field">@Html.LabelFor(m => m.CustomerName)@Html.TextBoxFor(m => m.CustomerName, new { placeholder = "Enter your full name" })@Html.ValidationMessageFor(m => m.CustomerName)</div>
+            <div class="field">@Html.LabelFor(m => m.Email)@Html.TextBoxFor(m => m.Email, new { type = "email", placeholder = "you@example.com" })@Html.ValidationMessageFor(m => m.Email)</div>
+            <div class="field">@Html.LabelFor(m => m.Phone)@Html.TextBoxFor(m => m.Phone, new { placeholder = "Phone number" })@Html.ValidationMessageFor(m => m.Phone)</div>
+            <div class="field">@Html.LabelFor(m => m.ShowDate)@Html.TextBoxFor(m => m.ShowDate, "{0:yyyy-MM-dd}", new { type = "date", min = DateTime.Today.ToString("yyyy-MM-dd") })@Html.ValidationMessageFor(m => m.ShowDate)</div>
+            <div class="field">@Html.LabelFor(m => m.ShowTime)@Html.DropDownListFor(m => m.ShowTime, new SelectList(new[] { "10:00 AM", "01:00 PM", "04:00 PM", "06:00 PM", "09:00 PM" }, Model.ShowTime), "Choose show time")@Html.ValidationMessageFor(m => m.ShowTime)</div>
+            <div class="field">@Html.LabelFor(m => m.TicketCount)@Html.DropDownListFor(m => m.TicketCount, new SelectList(Enumerable.Range(1, 10), Model.TicketCount))@Html.ValidationMessageFor(m => m.TicketCount)</div>
+            <div class="field field-full">@Html.LabelFor(m => m.SeatNumbers)@Html.TextBoxFor(m => m.SeatNumbers, new { placeholder = "For 2 tickets: A1,A2" })@Html.ValidationMessageFor(m => m.SeatNumbers)<small>Demo seat entry: use one unique seat label for each ticket, separated by commas.</small></div>
+        </div>
+        <div class="checkout-bar"><div><span>Price per ticket</span><strong>₹@Model.TicketPrice.ToString("0.00")</strong></div><div><span>Estimated total</span><strong id="estimated-total">₹@Model.TicketPrice.ToString("0.00")</strong></div><button type="submit" class="btn btn-primary btn-large">Confirm booking</button></div>
+    }
+</div>
+@section scripts {
+<script>
+(function () {
+    var count = document.getElementById("TicketCount");
+    var total = document.getElementById("estimated-total");
+    var price = @Model.TicketPrice.ToString(System.Globalization.CultureInfo.InvariantCulture);
+    if (count && total) {
+        function updateTotal() { total.textContent = "₹" + (price * parseInt(count.value || "1", 10)).toFixed(2); }
+        count.addEventListener("change", updateTotal);
+        updateTotal();
+    }
+}());
+</script>
+}

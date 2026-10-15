@@ -1,0 +1,15 @@
+@model MovieTicketBookingMVC.Models.Movie
+@{
+    ViewBag.Title = Model.Title;
+}
+<div class="details-layout">
+    <div class="details-poster"><img src="@Model.PosterUrl" alt="@Model.Title poster" onerror="this.style.display='none';this.parentElement.classList.add('poster-fallback');" /></div>
+    <div class="details-copy">
+        <p class="eyebrow">NOW SHOWING</p><h1>@Model.Title</h1>
+        <div class="detail-tags"><span>@Model.Genre</span><span>@Model.Language</span><span>@Model.DurationMinutes minutes</span></div>
+        <p class="description">@Model.Description</p>
+        <div class="price-panel"><span>Ticket price from</span><strong>₹@Model.TicketPrice.ToString("0.00")</strong></div>
+        @Html.ActionLink("Book tickets", "Create", "Bookings", new { movieId = Model.MovieId }, new { @class = "btn btn-primary btn-large" })
+        @Html.ActionLink("Back to movies", "Index", null, new { @class = "text-link back-link" })
+    </div>
+</div>

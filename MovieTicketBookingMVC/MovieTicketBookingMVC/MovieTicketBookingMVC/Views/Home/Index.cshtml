@@ -1,0 +1,37 @@
+@model IEnumerable<MovieTicketBookingMVC.Models.Movie>
+@{
+    ViewBag.Title = "Book Movie Tickets";
+}
+<section class="hero">
+    <div class="hero-content">
+        <p class="eyebrow">THE BIG SCREEN EXPERIENCE</p>
+        <h1>Great stories.<br /><span>Better seats.</span></h1>
+        <p>Find your next favourite movie and book your seats in just a few clicks.</p>
+        @Html.ActionLink("Explore Movies", "Index", "Movies", null, new { @class = "btn btn-primary" })
+    </div>
+    <div class="hero-art"><div class="reel">▶</div><span>YOUR MOVIE<br />NIGHT AWAITS</span></div>
+</section>
+<div class="section-heading">
+    <div><p class="eyebrow">NOW SHOWING</p><h2>Popular movies</h2></div>
+    @Html.ActionLink("View all movies →", "Index", "Movies", null, new { @class = "text-link" })
+</div>
+<div class="movie-grid">
+@foreach (var movie in Model)
+{
+    <article class="movie-card">
+        <a class="poster-wrap" href="@Url.Action("Details", "Movies", new { id = movie.MovieId })">
+            <img src="@movie.PosterUrl" alt="@movie.Title poster" onerror="this.style.display='none';this.parentElement.classList.add('poster-fallback');" />
+            <span class="poster-label">CINEBOOK PICK</span>
+        </a>
+        <div class="movie-info">
+            <div class="movie-meta"><span>@movie.Genre</span><span>@movie.DurationMinutes min</span></div>
+            <h3>@movie.Title</h3><p>@movie.Language</p>
+            <div class="movie-card-bottom"><strong>₹@movie.TicketPrice.ToString("0.00")</strong>@Html.ActionLink("Book now", "Create", "Bookings", new { movieId = movie.MovieId }, new { @class = "btn btn-small btn-primary" })</div>
+        </div>
+    </article>
+}
+</div>
+@if (!Model.Any())
+{
+    <div class="empty-state"><h3>No movies yet</h3><p>Run the SQL script in the database folder to add sample movies.</p></div>
+}

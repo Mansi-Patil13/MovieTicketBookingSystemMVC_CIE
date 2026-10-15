@@ -1,0 +1,28 @@
+@model IEnumerable<MovieTicketBookingMVC.Models.Booking>
+@{
+    ViewBag.Title = "My bookings";
+}
+<div class="page-intro"><p class="eyebrow">YOUR TICKETS</p><h1>My bookings</h1><p>Enter the email address used when booking to find your tickets.</p></div>
+@using (Html.BeginForm("MyBookings", "Bookings", FormMethod.Get, new { @class = "filter-bar" }))
+{
+    <input type="email" name="email" value="@ViewBag.Email" placeholder="Enter booking email" required />
+    <button type="submit" class="btn btn-primary">Find bookings</button>
+}
+@if (!string.IsNullOrWhiteSpace(Request.QueryString["email"]))
+{
+    if (!Model.Any()) { <div class="empty-state"><h3>No bookings found</h3><p>Check the email address and try again.</p></div> }
+    foreach (var booking in Model)
+    {
+        <article class="booking-row">
+            <div class="booking-icon">▶</div><div class="booking-main"><h3>@booking.Movie.Title</h3><p>CB-@booking.BookingId.ToString("D6") · @booking.ShowDate.ToString("dd MMM yyyy") · @booking.ShowTime</p><p>Seats: @booking.SeatNumbers · @booking.TicketCount ticket(s)</p></div>
+            <div class="booking-status"><strong>₹@booking.TotalAmount.ToString("0.00")</strong><span class="status @(booking.IsCancelled ? "status-cancelled" : "status-confirmed")">@(booking.IsCancelled ? "Cancelled" : "Confirmed")</span>
+            @if (!booking.IsCancelled && booking.ShowDate.Date >= DateTime.Today) {
+                using (Html.BeginForm("Cancel", "Bookings", new { id = booking.BookingId, email = booking.Email }, FormMethod.Post, new { onsubmit = "return confirm('Cancel this booking?');" })) {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="text-button">Cancel booking</button>
+                }
+            }
+            </div>
+        </article>
+    }
+}

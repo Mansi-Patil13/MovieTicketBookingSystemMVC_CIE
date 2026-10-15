@@ -1,0 +1,8 @@
+@{
+    ViewBag.Title = "Error";
+}
+<section class="empty-state">
+    <h1>Something went wrong</h1>
+    <p>Sorry, we could not complete your request. Please try again.</p>
+    @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "btn btn-primary" })
+</section>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - CineBook</title>
+    <link rel="stylesheet" href="@Url.Content("~/Content/site.css")" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="container nav-wrap">
+            <a class="brand" href="@Url.Action("Index", "Home")"><span class="brand-mark">▶</span> Cine<span>Book</span></a>
+            <nav>
+                @Html.ActionLink("Home", "Index", "Home")
+                @Html.ActionLink("Movies", "Index", "Movies")
+                @Html.ActionLink("My Bookings", "MyBookings", "Bookings")
+            </nav>
+        </div>
+    </header>
+    <main class="container page-content">
+        @if (TempData["Message"] != null) { <div class="notice">@TempData["Message"]</div> }
+        @RenderBody()
+    </main>
+    <footer><div class="container">© @DateTime.Now.Year CineBook · Your next movie night starts here.</div></footer>
+    <script src="@Url.Content("~/Scripts/site.js")"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

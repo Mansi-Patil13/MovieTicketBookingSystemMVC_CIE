@@ -1,0 +1,20 @@
+@model MovieTicketBookingMVC.Models.Booking
+@{
+    ViewBag.Title = "Booking confirmed";
+}
+<section class="confirmation">
+    <div class="success-icon">✓</div><p class="eyebrow">BOOKING COMPLETE</p><h1>Your movie night is booked!</h1><p class="muted">Keep your booking ID handy. This is a demo confirmation; no payment was collected.</p>
+    <div class="ticket">
+        <div class="ticket-top"><div><span class="ticket-label">MOVIE</span><h2>@Model.Movie.Title</h2><p>@Model.Movie.Genre · @Model.Movie.DurationMinutes min</p></div><div class="ticket-price">₹@Model.TotalAmount.ToString("0.00")</div></div>
+        <div class="ticket-details">
+            <div><span>BOOKING ID</span><strong>CB-@Model.BookingId.ToString("D6")</strong></div>
+            <div><span>DATE</span><strong>@Model.ShowDate.ToString("dd MMM yyyy")</strong></div>
+            <div><span>SHOW TIME</span><strong>@Model.ShowTime</strong></div>
+            <div><span>SEATS</span><strong>@Model.SeatNumbers</strong></div>
+            <div><span>TICKETS</span><strong>@Model.TicketCount</strong></div>
+            <div><span>BOOKED BY</span><strong>@Model.CustomerName</strong></div>
+        </div>
+    </div>
+    @Html.ActionLink("Browse more movies", "Index", "Movies", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Find my bookings", "MyBookings", "Bookings", new { email = Model.Email }, new { @class = "btn btn-outline" })
+</section>
